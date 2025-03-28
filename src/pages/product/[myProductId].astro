@@ -1,0 +1,77 @@
+---
+//@ts-nocheck
+import Layout from "../../layouts/Layout.astro";
+export async function getStaticPaths() {
+  const fashionUrl = "https://kea-alt-del.dk/t7/api/products";
+  const data = await fetch(fashionUrl).then((response) => response.json());
+
+  return data.map((product) => {
+    return {
+      params: { myProductId: product.id },
+      props: { myProduct: product },
+    };
+  });
+}
+
+const { myProduct } = Astro.props;
+---
+
+<Layout>
+  <main>
+    <div class="grid_1-1">
+      <div>
+        <img
+          src={`https://kea-alt-del.dk/t7/images/webp/640/${myProduct.id}.webp`}
+          alt="Produktbillede"
+          class="productImage"
+        />
+      </div>
+      <div>
+        <h1>{myProduct.productdisplayname}</h1>
+        <h2>{myProduct.category} | {myProduct.articletype}</h2>
+        <p>{myProduct.price} dkk</p>
+
+        <!-- Hvis den er lig med 1 vil sold out blive tilføjet -->
+        {myProduct.soldout == 1 && <p class="soldout">Sold out</p>}
+
+        <!-- tjekker hvis den er forskellig fra null !==, ? betyder det at det er det jeg spørger om. Hvis den er null : skal der ikke stå noget-->
+        {
+          myProduct.discount !== null ? (
+            <p class="discount">Sale {myProduct.discount}%</p>
+          ) : (
+            ""
+          )
+        }
+
+        <h3>Add to bag</h3>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .grid_1-1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .soldout {
+    color: red;
+  }
+  main {
+    margin-left: 4rem;
+    margin-right: 4rem;
+    margin-top: 4rem;
+  }
+
+  h3 {
+    border: 1.5px solid black; /* Default border */
+    color: black;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-right: 20rem;
+  }
+</style>

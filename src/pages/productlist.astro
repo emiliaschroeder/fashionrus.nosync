@@ -1,7 +1,31 @@
 ---
+//@ts-nocheck
+// hente data fra json fil
 const fashionUrl = "https://kea-alt-del.dk/t7/api/products";
 const data = await fetch(fashionUrl).then((res) => res.json());
 console.log(data);
+import Layout from "../layouts/Layout.astro";
+import ProductCard from "../components/ProductCard.astro";
 ---
 
-<h1>Produktliste</h1>
+<Layout>
+  <main>
+    <h1>Product list</h1>
+    <div class="grid_4">
+      {data.map((product) => <ProductCard {product} />)}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .grid_4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 30px;
+  }
+
+  main {
+    margin-left: 8rem;
+    margin-right: 8rem;
+  }
+</style>

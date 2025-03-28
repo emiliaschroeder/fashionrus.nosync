@@ -1,0 +1,63 @@
+---
+const { product } = Astro.props;
+---
+
+<article>
+  <img
+    src={`https://kea-alt-del.dk/t7/images/webp/640/${product.id}.webp`}
+    alt="Produktbillede"
+    class="productImage"
+  />
+  <h1>{product.productdisplayname}</h1>
+  <p>{product.category} | {product.articletype}</p>
+  <div class="price">
+    <p>{product.price} dkk</p>
+    <!-- tjekker hvis den er forskellig fra null !==, ? betyder det at det er det jeg spørger om. Hvis den er null : skal der ikke stå noget-->
+    {
+      product.discount !== null ? (
+        <p class="discount">Sale {product.discount}%</p>
+      ) : (
+        ""
+      )
+    }
+  </div>
+  <!-- Hvis den er lig med 1 vil sold out blive tilføjet -->
+  {product.soldout == 1 && <p class="soldout">Sold out</p>}
+  <a href=`/product/${product.id}`><p class="buy">Read more</p></a>
+</article>
+<style>
+  img {
+    max-width: 100%;
+  }
+
+  .price {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .discount {
+    background-color: green;
+    color: white;
+    padding: 8px;
+  }
+
+  .soldout {
+    background-color: red;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    border-radius: 20px;
+  }
+
+  .buy {
+    border: 1px solid black;
+    border-radius: 20px;
+    text-align: center;
+    padding: 10px;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+</style>
